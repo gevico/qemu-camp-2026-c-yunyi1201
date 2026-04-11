@@ -13,8 +13,23 @@ int parse_replace_command(const char* cmd, char** old_str, char** new_str) {
     *old_str = NULL;
     *new_str = NULL;
     
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    // 解析 s/old/new/ 格式
+    if (cmd[0] != 's') return -1;
+    const char *p = cmd + 1;
+    char delim = *p++;
+    if (!delim) return -1;
+
+    // 找 old_str
+    const char *old_start = p;
+    while (*p && *p != delim) p++;
+    if (!*p) return -1;
+    *old_str = strndup(old_start, p - old_start);
+    p++; // skip delim
+
+    // 找 new_str
+    const char *new_start = p;
+    while (*p && *p != delim) p++;
+    *new_str = strndup(new_start, p - new_start);
 
     return 0;
 }
@@ -25,8 +40,15 @@ void replace_first_occurrence(char* str, const char* old, const char* new) {
         return;
     }
     
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    // 找到 old 在 str 中第一次出现的位置
+    char *pos = strstr(str, old);
+    if (!pos) return;
+
+    size_t old_len = strlen(old);
+    size_t new_len = strlen(new);
+    // 用 memmove 腾出/收缩空间
+    memmove(pos + new_len, pos + old_len, strlen(pos + old_len) + 1);
+    memcpy(pos, new, new_len);
 }
 
 int __cmd_mysed(const char* rules, const char* str) {

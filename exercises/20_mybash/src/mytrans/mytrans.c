@@ -7,8 +7,16 @@
 #include <string.h>
 
 void trim(char *str) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    // 去掉尾部空白
+    int len = strlen(str);
+    while (len > 0 && (str[len-1] == ' ' || str[len-1] == '\t' ||
+                       str[len-1] == '\n' || str[len-1] == '\r')) {
+        str[--len] = '\0';
+    }
+    // 去掉头部空白
+    char *start = str;
+    while (*start == ' ' || *start == '\t') start++;
+    if (start != str) memmove(str, start, strlen(start) + 1);
 }
 
 int load_dictionary(const char *filename, HashTable *table,
@@ -24,8 +32,34 @@ int load_dictionary(const char *filename, HashTable *table,
   char current_translation[1024] = {0};
   int in_entry = 0;
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+  while (fgets(line, sizeof(line), file)) {
+    // 去掉换行
+    line[strcspn(line, "\n\r")] = '\0';
+    trim(line);
+    if (strlen(line) == 0) continue;
+
+    if (line[0] == '#') {
+      // 新词条开始：先把上一个词条存入
+      if (in_entry && current_word[0] != '\0' && current_translation[0] != '\0') {
+        hash_table_insert(table, current_word, current_translation);
+        (*dict_count)++;
+      }
+      strncpy(current_word, line + 1, sizeof(current_word) - 1);
+      current_word[sizeof(current_word) - 1] = '\0';
+      trim(current_word);
+      current_translation[0] = '\0';
+      in_entry = 1;
+    } else if (strncmp(line, "Trans:", 6) == 0) {
+      strncpy(current_translation, line + 6, sizeof(current_translation) - 1);
+      current_translation[sizeof(current_translation) - 1] = '\0';
+      trim(current_translation);
+    }
+  }
+  // 存最后一个词条
+  if (in_entry && current_word[0] != '\0' && current_translation[0] != '\0') {
+    hash_table_insert(table, current_word, current_translation);
+    (*dict_count)++;
+  }
 
   fclose(file);
   return 0;
