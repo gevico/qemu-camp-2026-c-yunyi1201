@@ -58,8 +58,14 @@ int is_builtin_command(char **args) {
   if (args[0] == NULL)
     return 0;
 
-  // TODO: 在这里添加你的代码
-  // I AM NOT DONE
+  if (strcmp(args[0], "cd") == 0) {
+    execute_cd(args);
+    return 1;
+  }
+  if (strcmp(args[0], "exit") == 0) {
+    execute_exit();
+    return 1;
+  }
 
   return 0;
 }

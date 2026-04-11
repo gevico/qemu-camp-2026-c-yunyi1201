@@ -3,10 +3,6 @@
 
 /*
  * 12 container_of 宏实现
- * 要求：
- *  - 使用 GCC 扩展（typeof、语句表达式）实现 container_of(ptr, type, member)
- *  - 通过结构体成员的指针获取结构体变量的指针
- *  - 示例：struct Test { int a; char b; }，当 ptr=&t.b 时应返回 &t
  */
 
 struct Test {
@@ -16,13 +12,9 @@ struct Test {
 
 /*
  * container_of 宏
- * 原理：结构体首地址 + 成员偏移量 = 成员地址
- *      → 结构体首地址 = 成员地址 - 成员偏移量
- * 类型约束：使用 typeof 对 ptr 的类型进行校验，减少误用风险
  */
-#define container_of(ptr, type, member)
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+#define container_of(ptr, type, member) \
+    ((__typeof__(type) *)((char *)(ptr) - offsetof(type, member)))
 
 int main(void) {
     struct Test t = {.a = 42, .b = 'Z'};
