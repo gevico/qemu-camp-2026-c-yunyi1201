@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
       return 1;
     }
 
-    printf("mybash: reading commands from file '%s'\n", filename);
+    // printf("mybash: reading commands from file '%s'\n", filename);
 
     while (fgets(input, sizeof(input), file)) {
       // 去掉末尾换行符
@@ -149,9 +149,9 @@ int main(int argc, char *argv[]) {
       const char *cmd_arg1 = (argc_parsed >= 2) ? args[1] : NULL;
       const char *cmd_arg2 = (argc_parsed >= 3) ? args[2] : NULL;
 
-      printf("cmd_name: %s\n", cmd_name);
-      printf("cmd_arg1: %s\n", cmd_arg1);
-      printf("cmd_arg2: %s\n", cmd_arg2);
+      // printf("cmd_name: %s\n", cmd_name);
+      // printf("cmd_arg1: %s\n", cmd_arg1);
+      // printf("cmd_arg2: %s\n", cmd_arg2);
 
       int found = 0;
       for (Command *cmd = commands; cmd->name != NULL; cmd++) {
@@ -176,52 +176,6 @@ int main(int argc, char *argv[]) {
     fclose(file);
     return 0;
   } 
-  else {
-    // 🔁 原有的交互式命令行模式
-    while (1) {
-      printf("mybash$ ");
-      fflush(stdout);
-
-      if (fgets(input, sizeof(input), stdin) == NULL) {
-        printf("\n");
-        break;
-      }
-
-      input[strcspn(input, "\n")] = '\0';
-
-      int argc = parse_input(input, args);
-
-      if (argc == 0) {
-        continue;
-      }
-
-      if (is_builtin_command(args)) {
-        continue;
-      }
-
-      const char *cmd_name = args[0];
-      const char *cmd_arg = (argc >= 2) ? args[1] : NULL;
-
-      int found = 0;
-      for (Command *cmd = commands; cmd->name != NULL; cmd++) {
-        if (strcmp(cmd_name, cmd->name) == 0) {
-          found = 1;
-          if (cmd->is_arg_required == 0) {
-            cmd->func.func_0();
-          } else if (cmd->is_arg_required == 1) {
-            cmd->func.func_1(cmd_arg);
-          } else if (cmd->is_arg_required == 2) {
-            cmd->func.func_2(cmd_arg, cmd_arg);
-          }
-          break;
-        }
-      }
-
-      if (!found) {
-        fprintf(stderr, "mybash: command not found: %s\n", cmd_name);
-      }
-    }
-  }
 
   return 0;
 }
