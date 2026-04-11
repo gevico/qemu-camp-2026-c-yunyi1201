@@ -12,8 +12,29 @@
 int parse_url(const char* url) {
     int err = 0;
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    // Find query string starting with '?'
+    const char *query = strchr(url, '?');
+    if (query == NULL) {
+        err = -1;
+        goto exit;
+    }
+    query++; // skip '?'
+
+    // Parse key=value pairs separated by '&'
+    char buf[1024];
+    strncpy(buf, query, sizeof(buf) - 1);
+    buf[sizeof(buf) - 1] = '\0';
+
+    char *saveptr = NULL;
+    char *token = strtok_r(buf, "&", &saveptr);
+    while (token != NULL) {
+        char *eq = strchr(token, '=');
+        if (eq != NULL) {
+            *eq = '\0';
+            printf("key = %s, value = %s\n", token, eq + 1);
+        }
+        token = strtok_r(NULL, "&", &saveptr);
+    }
 
 exit:
     return err;

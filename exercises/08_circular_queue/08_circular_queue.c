@@ -19,9 +19,35 @@ int main() {
     int total_people=50;
     int report_interval=5;
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
-    
+    // Initialize queue
+    q.head = 0;
+    q.tail = 0;
+    q.count = 0;
+
+    // Enqueue all people
+    for (int i = 1; i <= total_people; i++) {
+        q.data[q.tail].id = i;
+        q.tail = (q.tail + 1) % MAX_PEOPLE;
+        q.count++;
+    }
+
+    // Simulate Josephus ring
+    while (q.count > 1) {
+        // Move (report_interval - 1) people from front to back
+        for (int i = 0; i < report_interval - 1; i++) {
+            People p = q.data[q.head];
+            q.head = (q.head + 1) % MAX_PEOPLE;
+            q.count--;
+            q.data[q.tail] = p;
+            q.tail = (q.tail + 1) % MAX_PEOPLE;
+            q.count++;
+        }
+        // Eliminate the person at the front
+        printf("淘汰: %d\n", q.data[q.head].id);
+        q.head = (q.head + 1) % MAX_PEOPLE;
+        q.count--;
+    }
+
     printf("最后剩下的人是: %d\n", q.data[q.head].id);
 
     return 0;

@@ -14,28 +14,28 @@ int main() {
         printf("无法打开文件\n");
         return 1;
     }
-    
+
     Student *students[3];
-    
-    for (int i = 0; i < 3; i++) 
+
+    for (int i = 0; i < 3; i++)
     {
-	    // TODO: 在这里添加你的代码
-        // I AM NOT DONE
+        students[i] = (Student *)malloc(sizeof(Student));
+        fscanf(file, "%s %s %d", students[i]->id, students[i]->name, &students[i]->age);
     }
     fclose(file);
-    
-    for (int i = 0; i < 3; i++) 
+
+    for (int i = 0; i < 3; i++)
     {
-        printf("学号：%s, 姓名：%s, 年龄：%d\n", 
-               students[i]->id, 
-               students[i]->name, 
+        printf("学号：%s, 姓名：%s, 年龄：%d\n",
+               students[i]->id,
+               students[i]->name,
                students[i]->age);
     }
-    
-    for (int i = 0; i < 3; i++) 
+
+    for (int i = 0; i < 3; i++)
     {
         free(students[i]);
     }
-    
+
     return 0;
 }
