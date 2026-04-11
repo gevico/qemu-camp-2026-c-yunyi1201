@@ -23,13 +23,34 @@ static void josephus_problem(int n, int k, int m) {
 
     // 起始位置移动到第 k 个
     for (int i = 1; i < k; ++i) {
-        // TODO: 在这里添加你的代码
-        // I AM NOT DONE
+        prev = current;
+        current = current->next;
     }
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
-    
+    // 模拟约瑟夫环，依次删除节点
+    int remaining = n;
+    while (remaining > 0) {
+        // 从current开始数m步
+        for (int step = 1; step < m; step++) {
+            prev = current;
+            current = current->next;
+        }
+        // current 是要出列的人
+        printf("%d ", current->id);
+        remaining--;
+
+        if (remaining == 0) {
+            free(current);
+            break;
+        }
+
+        // Remove current from circle
+        Node *to_free = current;
+        prev->next = current->next;
+        current = current->next;
+        free(to_free);
+    }
+
     printf("\n");
 }
 
