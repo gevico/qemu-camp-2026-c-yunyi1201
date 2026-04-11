@@ -9,19 +9,16 @@ void print_elf_type(uint16_t e_type) {
   const char *type_str;
   switch (e_type) {
     case ET_NONE:
-      type_str = "Unknown (ET_NONE)";
+      type_str = "Unknown";
       break;
     case ET_REL:
-      type_str = "Relocatable (ET_REL)";
+      type_str = "Relocatable";
       break;
     case ET_EXEC:
-      type_str = "Executable (ET_EXEC)";
+      type_str = "Executable";
       break;
     case ET_DYN:
-      type_str = "Shared Object/PIE (ET_DYN)";
-      break;
-    case ET_CORE:
-      type_str = "Core (ET_CORE)";
+      type_str = "Shared Object/PIE";
       break;
     default:
       type_str = "Unknown";

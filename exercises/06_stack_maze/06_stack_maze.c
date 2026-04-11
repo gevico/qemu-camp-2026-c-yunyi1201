@@ -16,7 +16,7 @@ int target_col = 4;
 int path_len = 0;
 
 bool dfs(int row, int col) {
-    if (row >= MAX_ROW || col >= MAX_COL || maze[row][col] == 1 || visited[row][col]) {
+    if (row < 0 || col < 0 || row >= MAX_ROW || col >= MAX_COL || maze[row][col] == 1 || visited[row][col]) {
         return false;
     }
     visited[row][col] = 1;
@@ -31,7 +31,15 @@ bool dfs(int row, int col) {
     if (dfs(row + 1, col)) {
         return true;
     }
-
+    if (dfs(row, col - 1)) {
+        return true;
+    }
+    if (dfs(row - 1, col)) {
+        return true;
+    }
+    if (dfs(row, col + 1)) {
+        return true;
+    }
 
     // back-track
     path_len--;
@@ -41,7 +49,7 @@ bool dfs(int row, int col) {
 int main(void) {
     // TODO: 在这里添加你的代码
     if (dfs(0, 0)) {
-      for (int i = 0; i < path_len; i++) {
+      for (int i = path_len - 1; i >= 0; i--) {
           printf("(%d, %d)\n", path[i][0], path[i][1]);
       }
     } else {

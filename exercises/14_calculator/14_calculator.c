@@ -39,7 +39,7 @@ int main() {
 
     if (op == '/' && b == 0) {
         printf("错误: 除数不能为零\n");
-        return 1;
+        return 0;
     }
 
     int result = operations[index](a, b);
